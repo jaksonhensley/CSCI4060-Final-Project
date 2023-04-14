@@ -28,7 +28,7 @@ android {
     }
 
     apply plugin: 'com.android.application'
-    apple plugin: 'com.google.gns.google-services'
+    apply plugin: 'com.google.gms.google-services'
 }
 
 dependencies {
