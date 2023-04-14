@@ -1,5 +1,21 @@
 package edu.uga.cs.roomateshoppingapp;
 
+/**
+ * The User class represents a user of the roommate shopping app. It contains the user's personal information such as
+ * email, phone number, first name, last name, user ID, household ID, and purse balance.
+ *
+ * A User object can be created by passing in the user's email, phone number, first name, and last name to the constructor.
+ *
+ * The User class provides getter and setter methods for all the user's attributes: email, phone number, first name,
+ * last name, user ID, household ID, and purse balance.
+ *
+ * The email and phone number can be updated using the setEmail() and setPhoneNumber() methods. The first name and last name
+ * can be updated using the setFirstName() and setLastName() methods. The user ID can be set using the setUserID() method, and
+ * the household ID and purse balance can be set using the setHousehold() and setPurse() methods respectively.
+ *
+ * The getUserID(), getHousehold(), and getPurse() methods are used to retrieve the corresponding attribute values of a User
+ * object.
+ */
 public class User {
 
     private String email;
