@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "499874099739",
+    "firebase_url": "https://roomate-shopping-app-4e976-default-rtdb.firebaseio.com",
+    "project_id": "roomate-shopping-app-4e976",
+    "storage_bucket": "roomate-shopping-app-4e976.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499874099739:android:f6bbb4f44487bd715dfebe",
+        "android_client_info": {
+          "package_name": "edu.uga.cs.roomateshoppingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "499874099739-gelott662p8cihadglh6i27g96heht4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXjhZ8wX5hWM50T6GtxqH-D27LXb1wQYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "499874099739-gelott662p8cihadglh6i27g96heht4v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
