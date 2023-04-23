@@ -20,29 +20,29 @@
 
     <EditText
         android:id="@+id/loginEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="293dp"
+        android:layout_height="83dp"
         android:ems="10"
         android:hint="email"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/loginPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="299dp"
+        android:layout_height="95dp"
         android:ems="10"
         android:hint="password"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/loginPageLoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="LOGIN" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/loginPageCreateAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
