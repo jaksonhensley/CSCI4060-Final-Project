@@ -57,8 +57,7 @@ public class AddItemDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             String itemName = itemNameView.getText().toString();
-            String value = itemQuantityView.getText().toString();
-            int itemQuantity = Integer.parseInt(value);
+            String itemQuantity = itemQuantityView.getText().toString();
             String itemComments = itemCommentsView.getText().toString();
 
             ShoppingItem item = new ShoppingItem(itemName, itemQuantity, itemComments);

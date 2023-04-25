@@ -6,7 +6,7 @@ package edu.uga.cs.roomateshoppingapp;
 public class ShoppingItem {
     private String key;
     private String itemName;
-    private int itemQuantity;
+    private String itemQuantity;
     private String itemComments;
 
 
@@ -14,11 +14,11 @@ public class ShoppingItem {
     {
         this.key = null;
         this.itemName = null;
-        this.itemQuantity = 0;
+        this.itemQuantity = null;
         this.itemComments = null;
     }
 
-    public ShoppingItem( String itemName, int itemQuantity, String itemComments) {
+    public ShoppingItem( String itemName, String itemQuantity, String itemComments) {
         this.key = null;
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
@@ -41,11 +41,11 @@ public class ShoppingItem {
         this.itemName = itemName;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return itemQuantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.itemQuantity = quantity;
     }
 

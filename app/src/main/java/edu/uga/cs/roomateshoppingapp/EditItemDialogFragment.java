@@ -25,7 +25,7 @@ public class EditItemDialogFragment extends DialogFragment {
     int position;
     String key;
     String itemName;
-    int itemQuantity;
+    String itemQuantity;
     String itemComments;
 
     public interface EditItemDialogListener {
@@ -34,7 +34,7 @@ public class EditItemDialogFragment extends DialogFragment {
     }
 
 
-    public static EditItemDialogFragment newInstance( int position, String key, String itemName, int itemQuantity, String itemComments) {
+    public static EditItemDialogFragment newInstance( int position, String key, String itemName, String itemQuantity, String itemComments) {
 
         EditItemDialogFragment dialog = new EditItemDialogFragment();
 
@@ -42,7 +42,7 @@ public class EditItemDialogFragment extends DialogFragment {
         args.putString("key", key);
         args.putString("itemName", itemName);
         args.putString("itemComments", itemComments);
-        args.putInt("itemQuantity", itemQuantity);
+        args.putString("itemQuantity", itemQuantity);
         args.putInt("position", position);
         dialog.setArguments(args);
 
@@ -57,7 +57,7 @@ public class EditItemDialogFragment extends DialogFragment {
         key = getArguments().getString("key");
         position = getArguments().getInt("position");
         itemName = getArguments().getString("itemName");
-        itemQuantity = getArguments().getInt("itemQuantity");
+        itemQuantity = getArguments().getString("itemQuantity");
         itemComments = getArguments().getString("itemComments");
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -97,8 +97,7 @@ public class EditItemDialogFragment extends DialogFragment {
         @Override
         public void onClick(DialogInterface dialog, int which) {
          String itemName = itemNameView.getText().toString();
-         String value = itemQuantityView.getText().toString();
-         int itemQuantity = Integer.parseInt(value);
+         String itemQuantity = itemQuantityView.getText().toString();
          String itemComments = itemCommentsView.getText().toString();
 
          ShoppingItem item = new ShoppingItem(itemName, itemQuantity, itemComments);
@@ -119,8 +118,7 @@ public class EditItemDialogFragment extends DialogFragment {
         public void onClick( DialogInterface dialog, int which) {
 
             String itemName = itemNameView.getText().toString();
-            String value = itemQuantityView.getText().toString();
-            int itemQuantity = Integer.parseInt(value);
+            String itemQuantity = itemQuantityView.getText().toString();
             String itemComments = itemCommentsView.getText().toString();
 
             ShoppingItem item = new ShoppingItem(itemName, itemQuantity, itemComments);

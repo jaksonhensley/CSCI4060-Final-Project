@@ -58,7 +58,7 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
 
         String key = item.getKey();
         String itemName = item.getItemName();
-        int itemQuantity = item.getQuantity();
+        String itemQuantity = item.getQuantity();
         String itemComments = item.getComments();
 
         holder.itemNameView.setText( itemName );
