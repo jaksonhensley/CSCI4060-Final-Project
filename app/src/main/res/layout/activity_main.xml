@@ -30,4 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CREATE ACCOUNT" />
+
+    <Button
+        android:id="@+id/viewList"
+        android:layout_width="226dp"
+        android:layout_height="wrap_content"
+        android:text="View List" />
 </LinearLayout>
