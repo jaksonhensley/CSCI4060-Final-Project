@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 
 public class AddItemDialogFragment extends DialogFragment {
 
+    final private String DEBUG_TAG = "AddItemDialog";
     private EditText itemNameView;
     private EditText itemQuantityView;
     private EditText itemCommentsView;
@@ -59,6 +61,8 @@ public class AddItemDialogFragment extends DialogFragment {
             String itemName = itemNameView.getText().toString();
             String itemQuantity = itemQuantityView.getText().toString();
             String itemComments = itemCommentsView.getText().toString();
+
+            Log.d(DEBUG_TAG, "Item name is: " + itemName);
 
             ShoppingItem item = new ShoppingItem(itemName, itemQuantity, itemComments);
 

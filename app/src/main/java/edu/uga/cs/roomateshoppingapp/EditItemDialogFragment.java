@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import androidx.fragment.app.DialogFragment;
 
 public class EditItemDialogFragment extends DialogFragment {
 
+    final private String DEBUG_TAG = "EditItemDialog";
     public static final int SAVE = 1;
     public static final int DELETE = 2;
 
@@ -57,6 +59,7 @@ public class EditItemDialogFragment extends DialogFragment {
         key = getArguments().getString("key");
         position = getArguments().getInt("position");
         itemName = getArguments().getString("itemName");
+        Log.d(DEBUG_TAG, "Item name is: " + itemName);
         itemQuantity = getArguments().getString("itemQuantity");
         itemComments = getArguments().getString("itemComments");
 

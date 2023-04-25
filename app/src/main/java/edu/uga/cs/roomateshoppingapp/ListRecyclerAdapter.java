@@ -52,7 +52,7 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
 
     @Override
     public void onBindViewHolder( ItemHolder holder, int position ) {
-        ShoppingItem item = shoppingList.get( position );
+        ShoppingItem item = shoppingList.get(position);
 
         Log.d( DEBUG_TAG, "onBindViewHolder: " + item );
 
@@ -72,6 +72,8 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
                 Log.d(DEBUG_TAG, "onBindViewHolder: getItemID: " + holder.getItemId() );
                 Log.d(DEBUG_TAG, "onBindViewHolder: getAdapterPosition: " + holder.getAdapterPosition() );
 
+
+                Log.d(DEBUG_TAG, "Item name is: " + itemName);
                 EditItemDialogFragment editItemFragment = EditItemDialogFragment.newInstance( holder.getAdapterPosition(), key, itemName, itemQuantity, itemComments);
 
                 editItemFragment.show( ((AppCompatActivity)context).getSupportFragmentManager(), null);

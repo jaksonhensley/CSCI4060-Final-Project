@@ -19,7 +19,6 @@ public class ShoppingItem {
     }
 
     public ShoppingItem( String itemName, String itemQuantity, String itemComments) {
-        this.key = null;
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
         this.itemComments = itemComments;
@@ -37,8 +36,8 @@ public class ShoppingItem {
         return itemName;
     }
 
-    public void setItemName(String companyName) {
-        this.itemName = itemName;
+    public void setItemName(String name) {
+        this.itemName = name;
     }
 
     public String getQuantity() {
