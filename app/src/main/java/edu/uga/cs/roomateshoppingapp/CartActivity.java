@@ -1,5 +1,13 @@
 package edu.uga.cs.roomateshoppingapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,15 +15,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,12 +30,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopActivity extends AppCompatActivity
-        implements MoveToCartDialogFragment.MoveToCartDialogListener {
+public class CartActivity extends AppCompatActivity
+        implements AddCartItemDialogFragment.AddCartItemDialogListener,
+        MoveToCartDialogFragment.MoveToCartDialogListener {
 
-    public static final String DEBUG_TAG = "ShopScreenActivity";
+    public static final String DEBUG_TAG = "CartScreenActivity";
     private RecyclerView recyclerView;
-    private shoppingListRecyclerAdapter recyclerAdapter;
+    private ListRecyclerAdapter recyclerAdapter;
     private List<ShoppingItem> shoppingList;
     private List<CartItem> cartList;
     private FirebaseDatabase db;
@@ -55,17 +55,17 @@ public class ShopActivity extends AppCompatActivity
         Log.d( DEBUG_TAG, "onCreate()" );
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shop);
+        setContentView(R.layout.activity_cart);
 
         recyclerView = findViewById( R.id.recyclerView );
 
         // Find and give function to our Add Item button
-        Button viewCart = findViewById( R.id.viewCart);
-        viewCart.setOnClickListener( new View.OnClickListener () {
+        FloatingActionButton addButton = findViewById( R.id.floatingActionButton);
+        addButton.setOnClickListener( new View.OnClickListener () {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
-                startActivity(intent);
+            public void onClick( View view) {
+                DialogFragment newFragment = new AddCartItemDialogFragment();
+                newFragment.show( getSupportFragmentManager(), null );
             }
         });
 
@@ -75,11 +75,11 @@ public class ShopActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager( this );
         recyclerView.setLayoutManager( layoutManager );
 
-        recyclerAdapter = new shoppingListRecyclerAdapter( shoppingList, ShopActivity.this );
+        recyclerAdapter = new ListRecyclerAdapter( shoppingList, CartActivity.this );
         recyclerView.setAdapter( recyclerAdapter );
 
         db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference( "Items" );
+        DatabaseReference reference = db.getReference( "Cart" );
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -87,9 +87,9 @@ public class ShopActivity extends AppCompatActivity
                 shoppingList.clear();
 
                 for( DataSnapshot postSnapshot: snapshot.getChildren() ) {
-                    ShoppingItem item = postSnapshot.getValue(ShoppingItem.class);
+                    CartItem item = postSnapshot.getValue(CartItem.class);
                     item.setKey( postSnapshot.getKey() );
-                    shoppingList.add( item );
+                    cartList.add( item );
                     Log.d( DEBUG_TAG, "ValueEventListener: Added: " + item );
                     Log.d( DEBUG_TAG, "ValueEventListener: key: " + postSnapshot.getKey() );
                 }
@@ -136,7 +136,7 @@ public class ShopActivity extends AppCompatActivity
         shopButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -158,10 +158,33 @@ public class ShopActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     } // onOptionsItemSelected()
 
+    public void addCartItem(CartItem item) {
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference reference = db.getReference("Cart");
+
+        reference.push().setValue( item )
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        Log.d( DEBUG_TAG, "Cart Item saved: " + item );
+
+                        Toast.makeText(getApplicationContext(), item.getItemName() + " added to cart.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText( getApplicationContext(), "Failed to create Cart Item for " + item.getItemName(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     public void updateItem( int position, CartItem item, int action ) {
         if( action == MoveToCartDialogFragment.MOVE ) {
-            Log.d( DEBUG_TAG, "Moving item at: " + position + "(" + item.getItemName() + ")" );
+            Log.d( DEBUG_TAG, "Moving item at: " + position + "(" + item.getItemName() + ") to cart" );
 
             recyclerAdapter.notifyItemChanged( position );
 
@@ -178,24 +201,24 @@ public class ShopActivity extends AppCompatActivity
                     snapshot.getRef().setValue( item ).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d( DEBUG_TAG, "Updated item at: " + position + "(" + item.getItemName() + ")" );
+                            Log.d( DEBUG_TAG, "Moved item at: " + position + "(" + item.getItemName() + ") to cart" );
 
-                            Toast.makeText(getApplicationContext(), item.getItemName() + " updated.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), item.getItemName() + " moved to cart.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d( DEBUG_TAG, "failed to update " + item.getItemName());
+                    Log.d( DEBUG_TAG, "failed to move " + item.getItemName() + " to cart" );
 
-                    Toast.makeText(getApplicationContext(), "Failed to update " + item.getItemName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Failed to move " + item.getItemName() + " to cart.", Toast.LENGTH_SHORT).show();
 
                 }
             });
         }
         else if( action == EditItemDialogFragment.DELETE ) {
-            Log.d( DEBUG_TAG, "Deleting item at: " + position + "(" + item.getItemName() + ")" );
+            Log.d( DEBUG_TAG, "Deleting cart item at: " + position + "(" + item.getItemName() + ")" );
 
             shoppingList.remove(position);
 
@@ -203,7 +226,7 @@ public class ShopActivity extends AppCompatActivity
 
             DatabaseReference reference = db
                     .getReference()
-                    .child("Items")
+                    .child("Cart")
                     .child( item.getKey() );
 
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -213,7 +236,7 @@ public class ShopActivity extends AppCompatActivity
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Log.d( DEBUG_TAG, "deleted item at: " + position + "(" + item.getItemName() + ")" );
+                                    Log.d( DEBUG_TAG, "deleted cart item at: " + position + "(" + item.getItemName() + ")" );
 
                                     Toast.makeText(getApplicationContext(), "Item deleted for " + item.getItemName(), Toast.LENGTH_SHORT).show();
                                 }

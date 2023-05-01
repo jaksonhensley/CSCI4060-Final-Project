@@ -8,7 +8,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
-        implements AddCartItemDialogFragment.AddCartItemDialogListener {
+        implements AddItemDialogFragment.AddItemDialogListener,
+        EditItemDialogFragment.EditItemDialogListener {
 
     public static final String DEBUG_TAG = "HomeScreenActivity";
     private RecyclerView recyclerView;
@@ -61,12 +61,21 @@ public class HomeActivity extends AppCompatActivity
         recyclerView = findViewById( R.id.recyclerView );
 
         // Find and give function to our Add Item button
-        FloatingActionButton addButton = findViewById( R.id.floatingActionButtonHomeScreen );
+        FloatingActionButton addButton = findViewById( R.id.viewCart);
+        Button goShop = findViewById( R.id.goShoppingButton );
         addButton.setOnClickListener( new View.OnClickListener () {
             @Override
             public void onClick( View view) {
-                DialogFragment newFragment = new AddCartItemDialogFragment();
+                DialogFragment newFragment = new AddItemDialogFragment();
                 newFragment.show( getSupportFragmentManager(), null );
+            }
+        });
+
+        goShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -159,25 +168,25 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     } // onOptionsItemSelected()
 
-    public void addCartItem(CartItem item) {
+    public void addItem(ShoppingItem item) {
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference("Cart");
+        DatabaseReference reference = db.getReference("Items");
 
         reference.push().setValue( item )
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
 
-                        Log.d( DEBUG_TAG, "Cart Item saved: " + item );
+                        Log.d( DEBUG_TAG, "Item saved: " + item );
 
-                        Toast.makeText(getApplicationContext(), "Cart item created for " + item.getItemName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), item.getItemName() + " added to list.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText( getApplicationContext(), "Failed to create Cart Item for " + item.getItemName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( getApplicationContext(), "Failed to create Item for " + item.getItemName(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -194,22 +203,24 @@ public class HomeActivity extends AppCompatActivity
                     .child("Items")
                     .child( item.getKey() );
 
+
+
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     snapshot.getRef().setValue( item ).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d( DEBUG_TAG, "updated item at: " + position + "(" + item.getItemName() + ")" );
+                            Log.d( DEBUG_TAG, "Updated item at: " + position + "(" + item.getItemName() + ")" );
 
-                            Toast.makeText(getApplicationContext(), "Item updated for " + item.getItemName(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), item.getItemName() + " updated.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d( DEBUG_TAG, "failed to update item at: " + position + "(" + item.getItemName() + ")" );
+                    Log.d( DEBUG_TAG, "failed to update " + item.getItemName());
 
                     Toast.makeText(getApplicationContext(), "Failed to update " + item.getItemName(), Toast.LENGTH_SHORT).show();
 
@@ -225,8 +236,8 @@ public class HomeActivity extends AppCompatActivity
 
             DatabaseReference reference = db
                     .getReference()
-                    .child("Items" )
-                    .child(item.getKey() );
+                    .child("Item")
+                    .child( item.getKey() );
 
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

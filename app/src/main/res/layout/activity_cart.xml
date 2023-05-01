@@ -8,7 +8,11 @@
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
+    <!-- this the navigation view which draws and shows the navigation drawer -->
+    <!-- include the menu created in the menu folder -->
+
     <LinearLayout
+        android:id="@+id/currentTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -17,27 +21,27 @@
             android:id="@+id/shopScreenTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginBottom="50dp"
             android:gravity="center"
-            android:text="HOME"
+            android:text="SHOP"
             android:textSize="34sp"
             android:textStyle="bold|italic" />
 
         <TextView
             android:id="@+id/currentTabText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="269dp"
+            android:layout_height="85dp"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Shopping List"
+            android:text="currentTabText"
             android:textSize="34sp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="290dp"
-            android:layout_height="410dp"
+            android:layout_height="401dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
@@ -45,35 +49,35 @@
             android:scrollbars="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" >
 
         </androidx.recyclerview.widget.RecyclerView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/viewCart"
+            android:id="@+id/floatingActionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginEnd="30dp"
-
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="-70dp"
             android:clickable="true"
+
             android:contentDescription="Add New Item"
-            android:rotationX="0"
-            android:src="@android:drawable/ic_input_add" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_input_add" />
 
         <Button
-            android:id="@+id/goShoppingButton"
+            android:id="@+id/viewList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
-            android:text="Go Shop" />
-
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="List" />
     </LinearLayout>
 
-    <!-- this the navigation view which draws and shows the navigation drawer -->
-    <!-- include the menu created in the menu folder -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/homeScreenMenu"
         android:layout_width="wrap_content"
