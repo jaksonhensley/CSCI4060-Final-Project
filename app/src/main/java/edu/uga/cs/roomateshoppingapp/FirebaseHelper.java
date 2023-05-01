@@ -2,6 +2,7 @@ package edu.uga.cs.roomateshoppingapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -23,6 +24,11 @@ public class FirebaseHelper {
     } // FirebaseHelper Constructor
 
     public void login(String email, String password, Activity activity) {
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(activity, "Please enter email and password.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -61,7 +67,10 @@ public class FirebaseHelper {
                             activity.finish();
                         } else {
                             // Account creation failed, display error message
-                            Toast.makeText(activity, "Account creation failed. Please try again.", Toast.LENGTH_SHORT).show();
+                            Exception exception = task.getException();
+                            String errorMessage = "Account creation failed. Please try again.";
+                            Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show();
+                            Log.e("AccountCreation", errorMessage, exception);
                         }
                     }
                 });

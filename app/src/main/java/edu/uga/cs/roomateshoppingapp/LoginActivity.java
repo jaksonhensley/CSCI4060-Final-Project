@@ -33,5 +33,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        loginPageCreateAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }
