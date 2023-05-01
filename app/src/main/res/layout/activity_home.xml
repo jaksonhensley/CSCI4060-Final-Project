@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_drawer_layout"
@@ -9,14 +8,17 @@
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
+    <!-- this the navigation view which draws and shows the navigation drawer -->
+    <!-- include the menu created in the menu folder -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/currentTab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/shopScreenTitle"
@@ -25,14 +27,14 @@
                 android:layout_marginTop="128dp"
                 android:layout_marginBottom="50dp"
                 android:gravity="center"
-                android:text="Roomate Shopping App"
+                android:text="SHOP"
                 android:textSize="34sp"
                 android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/currentTabText"
-                android:layout_width="wrap_content"
-                android:layout_height="102dp"
+                android:layout_width="269dp"
+                android:layout_height="85dp"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="currentTabText"
@@ -41,8 +43,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="290dp"
+                android:layout_height="292dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
@@ -68,8 +70,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- this the navigation view which draws and shows the navigation drawer -->
-    <!-- include the menu created in the menu folder -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/homeScreenMenu"
         android:layout_width="wrap_content"

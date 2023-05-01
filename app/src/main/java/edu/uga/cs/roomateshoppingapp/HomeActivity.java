@@ -33,13 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity
-        implements AddItemDialogFragment.AddItemDialogListener,
-        EditItemDialogFragment.EditItemDialogListener {
+        implements AddCartItemDialogFragment.AddCartItemDialogListener {
 
     public static final String DEBUG_TAG = "HomeScreenActivity";
     private RecyclerView recyclerView;
     private ListRecyclerAdapter recyclerAdapter;
     private List<ShoppingItem> shoppingList;
+    private List<CartItem> cartList;
     private FirebaseDatabase db;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -53,7 +53,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Log.d( DEBUG_TAG, "onCeate()" );
+        Log.d( DEBUG_TAG, "onCreate()" );
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -65,7 +65,7 @@ public class HomeActivity extends AppCompatActivity
         addButton.setOnClickListener( new View.OnClickListener () {
             @Override
             public void onClick( View view) {
-                DialogFragment newFragment = new AddItemDialogFragment();
+                DialogFragment newFragment = new AddCartItemDialogFragment();
                 newFragment.show( getSupportFragmentManager(), null );
             }
         });
@@ -159,32 +159,25 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     } // onOptionsItemSelected()
 
-    public void addItem(ShoppingItem item) {
+    public void addCartItem(CartItem item) {
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference("Items");
+        DatabaseReference reference = db.getReference("Cart");
 
         reference.push().setValue( item )
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
 
-                        recyclerView.post( new Runnable() {
-                            @Override
-                            public void run() {
-                                recyclerView.smoothScrollToPosition( shoppingList.size()-1 );
-                            }
-                        });
+                        Log.d( DEBUG_TAG, "Cart Item saved: " + item );
 
-                        Log.d( DEBUG_TAG, "Item saved: " + item );
-
-                        Toast.makeText(getApplicationContext(), "Shopping item created for " + item.getItemName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Cart item created for " + item.getItemName(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText( getApplicationContext(), "Failed to create Shopping Item for " + item.getItemName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText( getApplicationContext(), "Failed to create Cart Item for " + item.getItemName(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

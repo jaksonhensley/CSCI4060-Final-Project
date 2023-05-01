@@ -68,7 +68,7 @@ public class EditItemDialogFragment extends DialogFragment {
 
         itemNameView = layout.findViewById( R.id.itemNameView );
         itemQuantityView = layout.findViewById( R.id.quantityView );
-        itemCommentsView = layout.findViewById( R.id.commentsView );
+        itemCommentsView = layout.findViewById( R.id.priceView);
 
 
         itemNameView.setText(itemName);

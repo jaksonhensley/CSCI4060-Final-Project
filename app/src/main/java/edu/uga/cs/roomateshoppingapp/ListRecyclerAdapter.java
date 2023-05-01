@@ -36,7 +36,7 @@ public class ListRecyclerAdapter extends RecyclerView.Adapter<ListRecyclerAdapte
 
             itemNameView = itemView.findViewById( R.id.itemName );
             itemQuantityView = itemView.findViewById( R.id.quantity );
-            itemCommentsView = itemView.findViewById( R.id.comments );
+            itemCommentsView = itemView.findViewById( R.id.price);
 
         }
     }

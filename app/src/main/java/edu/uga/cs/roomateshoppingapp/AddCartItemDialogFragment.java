@@ -8,20 +8,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-public class AddItemDialogFragment extends DialogFragment {
+public class AddCartItemDialogFragment extends DialogFragment {
 
-    final private String DEBUG_TAG = "AddItemDialog";
+    final private String DEBUG_TAG = "AddCartItemDialog";
     private EditText itemNameView;
     private EditText itemQuantityView;
-    private EditText itemCommentsView;
+    private EditText itemPriceView;
 
-    public interface AddItemDialogListener {
-        void addItem(ShoppingItem item);
+    public interface AddCartItemDialogListener {
+        void addCartItem(CartItem item);
     }
 
     @NonNull
@@ -29,18 +30,18 @@ public class AddItemDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View layout = inflater.inflate(R.layout.add_item_dialog, getActivity().findViewById(R.id.root));
+        final View layout = inflater.inflate(R.layout.add_to_cart_dialog, getActivity().findViewById(R.id.root));
 
         itemNameView = layout.findViewById( R.id.itemNameView);
         itemQuantityView = layout.findViewById( R.id.quantityView);
-        itemCommentsView = layout.findViewById( R.id.priceView);
+        itemPriceView = layout.findViewById( R.id.priceView);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
 
         builder.setView(layout);
 
-        builder.setTitle("New Item");
+        builder.setTitle("New Cart Item");
 
         builder.setNegativeButton( android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
@@ -49,26 +50,26 @@ public class AddItemDialogFragment extends DialogFragment {
             }
         });
 
-        builder.setPositiveButton( android.R.string.ok, new AddItemListener() );
+        builder.setPositiveButton( android.R.string.ok, new AddCartItemListener() );
 
         return builder.create();
 
     }
 
-    private class AddItemListener implements DialogInterface.OnClickListener {
+    private class AddCartItemListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             String itemName = itemNameView.getText().toString();
             String itemQuantity = itemQuantityView.getText().toString();
-            String itemComments = itemCommentsView.getText().toString();
+            String itemPrice = itemPriceView.getText().toString();
 
-            Log.d(DEBUG_TAG, "Item name is: " + itemName);
+            Log.d(DEBUG_TAG, "Cart Item name is: " + itemName);
 
-            ShoppingItem item = new ShoppingItem(itemName, itemQuantity, itemComments);
+            CartItem item = new CartItem(itemName, itemQuantity, itemPrice);
 
-            AddItemDialogListener listener = (AddItemDialogListener) getActivity();
+            AddCartItemDialogListener listener = (AddCartItemDialogListener) getActivity();
 
-            listener.addItem(item);
+            listener.addCartItem(item);
 
             dismiss();
 

@@ -74,6 +74,8 @@ public class ShoppingListActivity
         db = FirebaseDatabase.getInstance();
         DatabaseReference reference = db.getReference( "Items" );
 
+
+        //Listener to update shown shopping list when database changes
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -98,10 +100,12 @@ public class ShoppingListActivity
         });
     }
 
+    //Method to add items to the shopping list database
     public void addItem(ShoppingItem item) {
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference reference = db.getReference("Items");
+
 
         reference.push().setValue( item )
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -128,7 +132,7 @@ public class ShoppingListActivity
                 });
     }
 
-
+    //Method to update an existing item in the shopping list
     public void updateItem( int position, ShoppingItem item, int action ) {
         if( action == EditItemDialogFragment.SAVE ) {
             Log.d( DEBUG_TAG, "Updating item at: " + position + "(" + item.getItemName() + ")" );
