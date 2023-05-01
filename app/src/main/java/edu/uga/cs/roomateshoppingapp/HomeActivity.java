@@ -47,6 +47,7 @@ public class HomeActivity extends AppCompatActivity
     private NavigationView navigationView;
     private Menu menu;
     private MenuItem logoutButton;
+    private MenuItem shopButton;
 
 
     @Override
@@ -120,6 +121,7 @@ public class HomeActivity extends AppCompatActivity
 
         navigationView = findViewById(R.id.homeScreenMenu);
         menu = navigationView.getMenu();
+
         logoutButton = menu.findItem(R.id.nav_logout);
         logoutButton.setOnMenuItemClickListener(item -> {
             // Perform logout logic here
@@ -130,6 +132,17 @@ public class HomeActivity extends AppCompatActivity
 
             return true;
         });
+
+        shopButton = menu.findItem(R.id.nav_shop);
+        shopButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
     } // onCreate()
 
     // override the onOptionsItemSelected()
