@@ -32,7 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements EditItemDialogFragment.EditItemDialogListener {
+public class HomeActivity extends AppCompatActivity
+        implements AddItemDialogFragment.AddItemDialogListener,
+        EditItemDialogFragment.EditItemDialogListener {
 
     public static final String DEBUG_TAG = "HomeScreenActivity";
     private RecyclerView recyclerView;

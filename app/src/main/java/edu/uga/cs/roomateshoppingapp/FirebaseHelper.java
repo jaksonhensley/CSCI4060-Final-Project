@@ -15,6 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseHelper {
 
@@ -61,6 +62,9 @@ public class FirebaseHelper {
                                     .build();
                             user.updateProfile(profileUpdates);
 
+                            // Add value to database
+                            FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("Tab").setValue(0);
+
                             // Redirect to home activity
                             Intent intent = new Intent(activity, HomeActivity.class);
                             activity.startActivity(intent);
@@ -74,7 +78,7 @@ public class FirebaseHelper {
                         }
                     }
                 });
-    }
+    } // createAccount()
 
 
 } // FirebaseHelper Class
