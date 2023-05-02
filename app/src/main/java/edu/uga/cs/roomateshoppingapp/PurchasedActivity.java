@@ -135,7 +135,7 @@ public class PurchasedActivity extends AppCompatActivity
         shopButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), PurchasedActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
                 startActivity(intent);
                 return true;
             }
