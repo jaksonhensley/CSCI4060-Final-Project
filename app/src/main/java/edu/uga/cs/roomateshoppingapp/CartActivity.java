@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -99,7 +100,9 @@ public class CartActivity extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        String userFirstName = dataSnapshot.child("firstName").getValue(String.class);
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        String userFirstName = currentUser.getDisplayName();
 
                         for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                             String itemKey = itemSnapshot.getKey();

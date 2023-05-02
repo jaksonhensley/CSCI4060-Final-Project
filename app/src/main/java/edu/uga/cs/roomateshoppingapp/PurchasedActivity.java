@@ -164,7 +164,7 @@ public class PurchasedActivity extends AppCompatActivity
 
             DatabaseReference reference = db
                     .getReference()
-                    .child("Cart")
+                    .child("Items")
                     .child( item.getKey() );
 
 

@@ -8,6 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
 public class CreateAccountActivity extends AppCompatActivity {
 
     @Override
@@ -29,11 +33,17 @@ public class CreateAccountActivity extends AppCompatActivity {
                 String password = createAccountPassword.getText().toString().trim();
                 String confirmPassword = createAccountConfirmPassword.getText().toString().trim();
 
-                if (password.equals(confirmPassword)) {
-                    FirebaseHelper authHelper = new FirebaseHelper();
-                    authHelper.createAccount(name, email, password, CreateAccountActivity.this);
+                if (name != null || email != null || password != null || confirmPassword != null) {
+
+                    if (password.equals(confirmPassword)) {
+                        FirebaseHelper authHelper = new FirebaseHelper();
+                        authHelper.createAccount(name, email, password, CreateAccountActivity.this);
+                    } else {
+                        Toast.makeText(CreateAccountActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
-                    Toast.makeText(CreateAccountActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAccountActivity.this, "Please fill out the form", Toast.LENGTH_SHORT).show();
                 }
             }
         });
