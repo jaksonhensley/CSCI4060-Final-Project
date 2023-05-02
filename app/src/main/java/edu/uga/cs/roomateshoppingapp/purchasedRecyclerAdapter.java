@@ -36,7 +36,7 @@ public class purchasedRecyclerAdapter extends RecyclerView.Adapter<purchasedRecy
 
             itemNameView = itemView.findViewById( R.id.itemName );
             itemQuantityView = itemView.findViewById( R.id.quantity );
-            itemPersonView = itemView.findViewById( R.id.price);
+            itemPersonView = itemView.findViewById( R.id.person);
 
         }
     }

@@ -33,9 +33,8 @@ public class PurchasedActivity extends AppCompatActivity
 
     public static final String DEBUG_TAG = "ShopScreenActivity";
     private RecyclerView recyclerView;
-    private shoppingListRecyclerAdapter recyclerAdapter;
-    private List<ShoppingItem> shoppingList;
-    private List<CartItem> cartList;
+    private purchasedRecyclerAdapter recyclerAdapter;
+    private List<PurchasedItem> purchasedList;
     private FirebaseDatabase db;
     public DrawerLayout drawerLayout;
     public ActionBarDrawerToggle actionBarDrawerToggle;
@@ -54,11 +53,11 @@ public class PurchasedActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchased);
 
-        recyclerView = findViewById( R.id.recyclerView );
+        recyclerView = findViewById( R.id.purchasedRecyclerView );
 
         // Find and give function to our Add Item button
-        Button viewCart = findViewById( R.id.purchasedScreenShopButton);
-        viewCart.setOnClickListener( new View.OnClickListener () {
+        Button bottomShopButton = findViewById( R.id.purchasedScreenShopButton);
+        bottomShopButton.setOnClickListener( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
@@ -67,12 +66,12 @@ public class PurchasedActivity extends AppCompatActivity
         });
 
         // initialize an empty shopping list
-        shoppingList = new ArrayList<ShoppingItem>();
+        purchasedList = new ArrayList<PurchasedItem>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager( this );
         recyclerView.setLayoutManager( layoutManager );
 
-        recyclerAdapter = new shoppingListRecyclerAdapter( shoppingList, PurchasedActivity.this );
+        recyclerAdapter = new purchasedRecyclerAdapter( purchasedList, PurchasedActivity.this );
         recyclerView.setAdapter( recyclerAdapter );
 
         db = FirebaseDatabase.getInstance();
@@ -81,12 +80,12 @@ public class PurchasedActivity extends AppCompatActivity
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                shoppingList.clear();
+                purchasedList.clear();
 
                 for( DataSnapshot postSnapshot: snapshot.getChildren() ) {
-                    ShoppingItem item = postSnapshot.getValue(ShoppingItem.class);
+                    PurchasedItem item = new PurchasedItem();
                     item.setKey( postSnapshot.getKey() );
-                    shoppingList.add( item );
+                    purchasedList.add( item );
                     Log.d( DEBUG_TAG, "ValueEventListener: Added: " + item );
                     Log.d( DEBUG_TAG, "ValueEventListener: key: " + postSnapshot.getKey() );
                 }
@@ -194,7 +193,7 @@ public class PurchasedActivity extends AppCompatActivity
         else if( action == EditItemDialogFragment.DELETE ) {
             Log.d( DEBUG_TAG, "Deleting item at: " + position + "(" + item.getItemName() + ")" );
 
-            shoppingList.remove(position);
+            purchasedList.remove(position);
 
             recyclerAdapter.notifyItemRemoved( position );
 

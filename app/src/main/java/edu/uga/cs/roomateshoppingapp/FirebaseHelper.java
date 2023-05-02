@@ -17,8 +17,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class FirebaseHelper {
 
+    private final String DEBUG_TAG = "FirebaseHelper";
     private FirebaseAuth mAuth;
     FirebaseHelper() {
         mAuth = FirebaseAuth.getInstance();
@@ -79,6 +82,22 @@ public class FirebaseHelper {
                     }
                 });
     } // createAccount()
+
+    public int getTotalUsers() {
+        AtomicInteger count = new AtomicInteger();
+        FirebaseAuth.getInstance().fetchSignInMethodsForEmail("anyemail@domain.com")
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
+                        if (isNewUser) {
+                            count.set(count.get() + 1);
+                        }
+                    }
+                });
+        return count.get();
+    }
+
+
 
 
 } // FirebaseHelper Class
