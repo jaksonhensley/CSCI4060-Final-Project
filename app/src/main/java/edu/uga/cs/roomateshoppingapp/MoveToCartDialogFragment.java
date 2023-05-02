@@ -104,7 +104,7 @@ public class MoveToCartDialogFragment extends DialogFragment {
          String itemQuantity = itemQuantityView.getText().toString();
          String itemPrice = itemPriceView.getText().toString();
 
-         CartItem item = new CartItem(itemName, itemQuantity, itemPrice);
+         CartItem item = new CartItem(key, itemName, itemQuantity, itemPrice);
          item.setKey( key );
 
          MoveToCartDialogListener listener = (MoveToCartDialogFragment.MoveToCartDialogListener) getActivity();
