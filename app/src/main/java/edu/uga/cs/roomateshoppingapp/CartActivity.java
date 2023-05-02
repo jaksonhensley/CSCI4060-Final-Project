@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CartActivity extends AppCompatActivity
@@ -97,12 +98,19 @@ public class CartActivity extends AppCompatActivity
                 cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        String userFirstName = dataSnapshot.child("firstName").getValue(String.class);
+
                         for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
                             String itemKey = itemSnapshot.getKey();
                             Object itemValue = itemSnapshot.getValue();
 
-                            // move the item to the "Purchased" collection
-                            purchasedReference.child(itemKey).setValue(itemValue);
+                            // add the current user's first name to the item
+                            if (itemValue instanceof HashMap) {
+                                HashMap<String, Object> itemMap = (HashMap<String, Object>) itemValue;
+                                itemMap.put("firstName", userFirstName);
+                                purchasedReference.child(itemKey).setValue(itemMap);
+                            }
                             // remove the item from the "Cart" collection
                             cartReference.child(itemKey).removeValue();
                             // remove the item from the "Items" collection
