@@ -31,11 +31,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity
+public class CheckoutActivity extends AppCompatActivity
         implements AddCartItemDialogFragment.AddCartItemDialogListener,
         EditCartItemDialogFragment.EditCartItemDialogListener {
 
-    public static final String DEBUG_TAG = "CartScreenActivity";
+    public static final String DEBUG_TAG = "CheckoutScreenActivity";
     private RecyclerView recyclerView;
     private cartListRecyclerAdapter recyclerAdapter;
     private List<CartItem> cartList;
@@ -94,7 +94,7 @@ public class CartActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager( this );
         recyclerView.setLayoutManager( layoutManager );
 
-        recyclerAdapter = new cartListRecyclerAdapter( cartList, CartActivity.this );
+        recyclerAdapter = new cartListRecyclerAdapter( cartList, CheckoutActivity.this );
         recyclerView.setAdapter( recyclerAdapter );
 
         db = FirebaseDatabase.getInstance();
@@ -155,7 +155,7 @@ public class CartActivity extends AppCompatActivity
         shopButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CheckoutActivity.class);
                 startActivity(intent);
                 return true;
             }
