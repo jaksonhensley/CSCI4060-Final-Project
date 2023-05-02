@@ -8,26 +8,29 @@
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
+    <!-- this the navigation view which draws and shows the navigation drawer -->
+    <!-- include the menu created in the menu folder -->
     <LinearLayout
+        android:id="@+id/currentTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/shopScreenTitle"
+            android:id="@+id/purchasedScreenTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="50dp"
             android:gravity="center"
-            android:text="HOME"
+            android:text="Purchased Items"
             android:textSize="34sp"
             android:textStyle="bold|italic" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="290dp"
-            android:layout_height="410dp"
+            android:layout_height="448dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
@@ -39,31 +42,18 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/viewCart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginEnd="30dp"
-
-            android:layout_marginBottom="5dp"
-            android:clickable="true"
-            android:contentDescription="Add New Item"
-            android:rotationX="0"
-            android:src="@android:drawable/ic_input_add" />
-
         <Button
-            android:id="@+id/goShoppingButton"
+            android:id="@+id/purchasedScreenShopButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
-            android:text="Go Shop" />
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="Shop" />
 
     </LinearLayout>
 
-    <!-- this the navigation view which draws and shows the navigation drawer -->
-    <!-- include the menu created in the menu folder -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/homeScreenMenu"
         android:layout_width="wrap_content"

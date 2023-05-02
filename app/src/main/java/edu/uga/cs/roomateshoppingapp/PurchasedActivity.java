@@ -13,13 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,13 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartActivity extends AppCompatActivity
-        implements AddCartItemDialogFragment.AddCartItemDialogListener,
-        EditCartItemDialogFragment.EditCartItemDialogListener {
+public class PurchasedActivity extends AppCompatActivity
+        implements MoveToCartDialogFragment.MoveToCartDialogListener {
 
-    public static final String DEBUG_TAG = "CartScreenActivity";
+    public static final String DEBUG_TAG = "ShopScreenActivity";
     private RecyclerView recyclerView;
-    private cartListRecyclerAdapter recyclerAdapter;
+    private shoppingListRecyclerAdapter recyclerAdapter;
+    private List<ShoppingItem> shoppingList;
     private List<CartItem> cartList;
     private FirebaseDatabase db;
     public DrawerLayout drawerLayout;
@@ -55,98 +52,41 @@ public class CartActivity extends AppCompatActivity
         Log.d( DEBUG_TAG, "onCreate()" );
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
+        setContentView(R.layout.activity_purchased);
 
         recyclerView = findViewById( R.id.recyclerView );
 
         // Find and give function to our Add Item button
-        FloatingActionButton addButton = findViewById( R.id.floatingActionButton);
-        Button viewList = findViewById( R.id.viewList);
-        Button checkout = findViewById( R.id.Checkout );
-
-        addButton.setOnClickListener( new View.OnClickListener () {
-            @Override
-            public void onClick( View view) {
-                DialogFragment newFragment = new AddCartItemDialogFragment();
-                newFragment.show( getSupportFragmentManager(), null );
-            }
-        });
-
-        viewList.setOnClickListener( new View.OnClickListener () {
+        Button viewCart = findViewById( R.id.purchasedScreenShopButton);
+        viewCart.setOnClickListener( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-                db = FirebaseDatabase.getInstance();
-                DatabaseReference cartRef = db.getReference( "Cart" );
-
-
-
-
                 Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
                 startActivity(intent);
             }
         });
 
-        checkout.setOnClickListener( new View.OnClickListener () {
-            @Override
-            public void onClick(View view) {
-                db = FirebaseDatabase.getInstance();
-                DatabaseReference cartReference = db.getReference( "Cart" );
-                DatabaseReference listReference = db.getReference( "Items" );
-                DatabaseReference purchasedReference = db.getReference( "Purchased" );
-
-                cartReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
-                            String itemKey = itemSnapshot.getKey();
-                            Object itemValue = itemSnapshot.getValue();
-
-                            // move the item to the "Purchased" collection
-                            purchasedReference.child(itemKey).setValue(itemValue);
-                            // remove the item from the "Cart" collection
-                            cartReference.child(itemKey).removeValue();
-                            // remove the item from the "Items" collection
-                            listReference.child(itemKey).removeValue();
-                        }
-                        Toast.makeText(getApplicationContext(), "Purchase successful", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e(DEBUG_TAG, "Error retrieving Cart items: " + databaseError.getMessage());
-                        Toast.makeText(getApplicationContext(), "Error retrieving Cart items", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                Toast.makeText(getApplicationContext(), "Purchase successful", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // initialize an empty shopping list
-        cartList = new ArrayList<CartItem>();
+        shoppingList = new ArrayList<ShoppingItem>();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager( this );
         recyclerView.setLayoutManager( layoutManager );
 
-        recyclerAdapter = new cartListRecyclerAdapter( cartList, CartActivity.this );
+        recyclerAdapter = new shoppingListRecyclerAdapter( shoppingList, PurchasedActivity.this );
         recyclerView.setAdapter( recyclerAdapter );
 
         db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference( "Cart" );
+        DatabaseReference reference = db.getReference( "Purchased" );
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                cartList.clear();
+                shoppingList.clear();
 
                 for( DataSnapshot postSnapshot: snapshot.getChildren() ) {
-                    CartItem item = postSnapshot.getValue(CartItem.class);
+                    ShoppingItem item = postSnapshot.getValue(ShoppingItem.class);
                     item.setKey( postSnapshot.getKey() );
-                    cartList.add( item );
+                    shoppingList.add( item );
                     Log.d( DEBUG_TAG, "ValueEventListener: Added: " + item );
                     Log.d( DEBUG_TAG, "ValueEventListener: key: " + postSnapshot.getKey() );
                 }
@@ -193,7 +133,7 @@ public class CartActivity extends AppCompatActivity
         shopButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                Intent intent = new Intent(getApplicationContext(), PurchasedActivity.class);
                 startActivity(intent);
                 return true;
             }
@@ -215,33 +155,10 @@ public class CartActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     } // onOptionsItemSelected()
 
-    public void addCartItem(CartItem item) {
-
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference reference = db.getReference("Cart");
-
-        reference.push().setValue( item )
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                        Log.d( DEBUG_TAG, "Cart Item saved: " + item );
-
-                        Toast.makeText(getApplicationContext(), item.getItemName() + " added to cart.", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText( getApplicationContext(), "Failed to create Cart Item for " + item.getItemName(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
 
     public void updateItem( int position, CartItem item, int action ) {
         if( action == MoveToCartDialogFragment.MOVE ) {
-            Log.d( DEBUG_TAG, "Moving item at: " + position + "(" + item.getItemName() + ") to cart" );
+            Log.d( DEBUG_TAG, "Moving item at: " + position + "(" + item.getItemName() + ")" );
 
             recyclerAdapter.notifyItemChanged( position );
 
@@ -258,32 +175,32 @@ public class CartActivity extends AppCompatActivity
                     snapshot.getRef().setValue( item ).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d( DEBUG_TAG, "Moved item at: " + position + "(" + item.getItemName() + ") to cart" );
+                            Log.d( DEBUG_TAG, "Updated item at: " + position + "(" + item.getItemName() + ")" );
 
-                            Toast.makeText(getApplicationContext(), item.getItemName() + " moved to cart.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), item.getItemName() + " updated.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d( DEBUG_TAG, "failed to move " + item.getItemName() + " to cart" );
+                    Log.d( DEBUG_TAG, "failed to update " + item.getItemName());
 
-                    Toast.makeText(getApplicationContext(), "Failed to move " + item.getItemName() + " to cart.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Failed to update " + item.getItemName(), Toast.LENGTH_SHORT).show();
 
                 }
             });
         }
         else if( action == EditItemDialogFragment.DELETE ) {
-            Log.d( DEBUG_TAG, "Deleting cart item at: " + position + "(" + item.getItemName() + ")" );
+            Log.d( DEBUG_TAG, "Deleting item at: " + position + "(" + item.getItemName() + ")" );
 
-            cartList.remove(position);
+            shoppingList.remove(position);
 
             recyclerAdapter.notifyItemRemoved( position );
 
             DatabaseReference reference = db
                     .getReference()
-                    .child("Cart")
+                    .child("Items")
                     .child( item.getKey() );
 
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -293,7 +210,7 @@ public class CartActivity extends AppCompatActivity
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Log.d( DEBUG_TAG, "deleted cart item at: " + position + "(" + item.getItemName() + ")" );
+                                    Log.d( DEBUG_TAG, "deleted item at: " + position + "(" + item.getItemName() + ")" );
 
                                     Toast.makeText(getApplicationContext(), "Item deleted for " + item.getItemName(), Toast.LENGTH_SHORT).show();
                                 }
