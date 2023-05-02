@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
         mainScreenLoginButton = findViewById(R.id.mainScreenLoginButton);
         mainScreenCreateAccountButton = findViewById(R.id.mainScreenCreateAccountButton);
-        viewLists = findViewById( R.id.viewList);
-        homeButton = findViewById(R.id.homeButton);
 
         mainScreenLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,22 +35,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CreateAccountActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        viewLists.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ShoppingListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
