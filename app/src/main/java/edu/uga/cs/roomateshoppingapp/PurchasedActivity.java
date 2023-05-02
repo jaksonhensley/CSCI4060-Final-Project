@@ -83,6 +83,8 @@ public class PurchasedActivity extends AppCompatActivity
                 for( DataSnapshot postSnapshot: snapshot.getChildren() ) {
                     PurchasedItem item = postSnapshot.getValue(PurchasedItem.class);
                     item.setKey( postSnapshot.getKey() );
+                    String person = postSnapshot.child("firstName").getValue(String.class);
+                    item.setPerson(person);
                     purchasedList.add( item );
                     Log.d( DEBUG_TAG, "ValueEventListener: Added: " + item );
                     Log.d( DEBUG_TAG, "ValueEventListener: key: " + postSnapshot.getKey() );

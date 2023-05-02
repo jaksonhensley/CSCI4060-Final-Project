@@ -29,6 +29,7 @@ public class purchasedRecyclerAdapter extends RecyclerView.Adapter<purchasedRecy
 
         TextView itemNameView;
         TextView itemQuantityView;
+        TextView itemPriceView;
         TextView itemPersonView;
 
         public ItemHolder(View itemView ) {
@@ -36,6 +37,7 @@ public class purchasedRecyclerAdapter extends RecyclerView.Adapter<purchasedRecy
 
             itemNameView = itemView.findViewById( R.id.itemName );
             itemQuantityView = itemView.findViewById( R.id.quantity );
+            itemPriceView = itemView.findViewById(R.id.price);
             itemPersonView = itemView.findViewById( R.id.person);
 
         }
@@ -46,7 +48,7 @@ public class purchasedRecyclerAdapter extends RecyclerView.Adapter<purchasedRecy
     @Override
     public ItemHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         View view = LayoutInflater.from( parent.getContext())
-                .inflate( R.layout.cart_item, parent, false);
+                .inflate( R.layout.purchased_item, parent, false);
         return new ItemHolder( view );
     }
 
@@ -59,10 +61,12 @@ public class purchasedRecyclerAdapter extends RecyclerView.Adapter<purchasedRecy
         String key = item.getKey();
         String itemName = item.getItemName();
         String itemQuantity = item.getQuantity();
+        String itemPrice = item.getPrice();
         String itemPerson = item.getPerson();
 
         holder.itemNameView.setText( itemName );
         holder.itemQuantityView.setText( itemQuantity );
+        holder.itemPriceView.setText(itemPrice);
         if (itemPerson != null) {
             holder.itemPersonView.setText( itemPerson );
         }
