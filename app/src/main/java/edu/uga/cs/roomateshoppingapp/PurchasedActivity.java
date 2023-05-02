@@ -31,7 +31,7 @@ import java.util.List;
 public class PurchasedActivity extends AppCompatActivity
         implements MoveToCartDialogFragment.MoveToCartDialogListener {
 
-    public static final String DEBUG_TAG = "ShopScreenActivity";
+    public static final String DEBUG_TAG = "PurchaseActivity";
     private RecyclerView recyclerView;
     private purchasedRecyclerAdapter recyclerAdapter;
     private List<PurchasedItem> purchasedList;

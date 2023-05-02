@@ -28,7 +28,7 @@
             android:textStyle="bold|italic" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/purchasedRecyclerView"
             android:layout_width="290dp"
             android:layout_height="448dp"
             android:layout_gravity="center"

@@ -63,7 +63,9 @@ public class purchasedRecyclerAdapter extends RecyclerView.Adapter<purchasedRecy
 
         holder.itemNameView.setText( itemName );
         holder.itemQuantityView.setText( itemQuantity );
-        holder.itemPersonView.setText( itemPerson );
+        if (itemPerson != null) {
+            holder.itemPersonView.setText( itemPerson );
+        }
 
 
         holder.itemView.setOnClickListener( new View.OnClickListener() {
