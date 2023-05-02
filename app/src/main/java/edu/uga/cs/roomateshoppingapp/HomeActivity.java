@@ -48,6 +48,7 @@ public class HomeActivity extends AppCompatActivity
     private Menu menu;
     private MenuItem logoutButton;
     private MenuItem shopButton;
+    private MenuItem purchasedButton;
 
 
     @Override
@@ -147,6 +148,16 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+        purchasedButton = menu.findItem(R.id.nav_purchased);
+        purchasedButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(), PurchasedActivity.class);
                 startActivity(intent);
                 return true;
             }
