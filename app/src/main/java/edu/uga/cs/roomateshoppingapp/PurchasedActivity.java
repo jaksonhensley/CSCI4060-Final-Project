@@ -71,8 +71,6 @@ public class PurchasedActivity extends AppCompatActivity
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager( this );
         recyclerView.setLayoutManager( layoutManager );
 
-        recyclerAdapter = new purchasedRecyclerAdapter( purchasedList, PurchasedActivity.this );
-        recyclerView.setAdapter( recyclerAdapter );
 
         db = FirebaseDatabase.getInstance();
         DatabaseReference reference = db.getReference( "Purchased" );
@@ -83,7 +81,7 @@ public class PurchasedActivity extends AppCompatActivity
                 purchasedList.clear();
 
                 for( DataSnapshot postSnapshot: snapshot.getChildren() ) {
-                    PurchasedItem item = new PurchasedItem();
+                    PurchasedItem item = postSnapshot.getValue(PurchasedItem.class);
                     item.setKey( postSnapshot.getKey() );
                     purchasedList.add( item );
                     Log.d( DEBUG_TAG, "ValueEventListener: Added: " + item );
@@ -99,6 +97,9 @@ public class PurchasedActivity extends AppCompatActivity
                 System.out.println( "ValueEventListener: reading failed: " + error.getMessage() );
             }
         });
+
+        recyclerAdapter = new purchasedRecyclerAdapter( purchasedList, PurchasedActivity.this );
+        recyclerView.setAdapter( recyclerAdapter );
 
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
