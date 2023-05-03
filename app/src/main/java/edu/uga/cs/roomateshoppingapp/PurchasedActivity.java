@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PurchasedActivity extends AppCompatActivity
@@ -43,6 +45,7 @@ public class PurchasedActivity extends AppCompatActivity
     private Menu menu;
     private MenuItem logoutButton;
     private MenuItem shopButton;
+    private Double total = 0.0, split = 0.0, price = 0.0;
 
 
     @Override
@@ -56,11 +59,11 @@ public class PurchasedActivity extends AppCompatActivity
         recyclerView = findViewById( R.id.purchasedRecyclerView );
 
         // Find and give function to our Add Item button
-        Button bottomShopButton = findViewById( R.id.purchasedScreenShopButton);
+        Button bottomShopButton = findViewById( R.id.purchasedScreenHomeButton);
         bottomShopButton.setOnClickListener( new View.OnClickListener () {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), ShopActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -99,6 +102,64 @@ public class PurchasedActivity extends AppCompatActivity
                 System.out.println( "ValueEventListener: reading failed: " + error.getMessage() );
             }
         });
+
+        Button settleCosts = findViewById( R.id.settleCostButton );
+
+        settleCosts.setOnClickListener( new View.OnClickListener () {
+            @Override
+            public void onClick(View view) {
+                db = FirebaseDatabase.getInstance();
+                DatabaseReference purchasedReference = db.getReference( "Purchased" );
+                DatabaseReference userReference = db.getReference( "users" );
+
+                purchasedReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                        for (DataSnapshot itemSnapshot : dataSnapshot.getChildren()) {
+                            String itemKey = itemSnapshot.getKey();
+                            PurchasedItem item = itemSnapshot.getValue(PurchasedItem.class);
+
+                            // Add price of item to user for tab
+                            price = Double.valueOf(item.getPrice());
+
+                            //Add up total prices for split
+                            total = (total + price);
+
+
+
+                            // remove the item from the "Cart" collection
+                            purchasedReference.child(itemKey).removeValue();
+                        }
+
+                        FirebaseHelper fbh = new FirebaseHelper();
+                        Double users = Double.valueOf(fbh.getTotalUsers());
+
+                        split = (total / users);
+
+
+                        Toast.makeText(getApplicationContext(), "Total Purchase Price " + split, Toast.LENGTH_SHORT).show();
+                        Log.d(DEBUG_TAG,"Split Cost : ( Total: " + total + " )/( Users: " + users + " ) = " + split );
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e(DEBUG_TAG, "Error retrieving Cart items: " + databaseError.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error retrieving Cart items", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                Toast.makeText(getApplicationContext(), "Purchase successful", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+
 
         recyclerAdapter = new purchasedRecyclerAdapter( purchasedList, PurchasedActivity.this );
         recyclerView.setAdapter( recyclerAdapter );

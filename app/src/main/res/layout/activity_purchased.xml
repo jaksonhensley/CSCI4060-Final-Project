@@ -30,7 +30,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/purchasedRecyclerView"
             android:layout_width="290dp"
-            android:layout_height="448dp"
+            android:layout_height="358dp"
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
@@ -43,14 +43,23 @@
         </androidx.recyclerview.widget.RecyclerView>
 
         <Button
-            android:id="@+id/purchasedScreenShopButton"
+            android:id="@+id/purchasedScreenHomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="-47dp"
+            android:text="Home" />
+
+        <Button
+            android:id="@+id/settleCostButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="20dp"
             android:layout_marginBottom="20dp"
-            android:text="Shop" />
+            android:text="Settle Costs" />
 
     </LinearLayout>
 
