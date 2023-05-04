@@ -65,6 +65,7 @@ public class FirebaseHelper {
                                     .build();
                             user.updateProfile(profileUpdates);
 
+
                             // Add value to database
                             FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("Tab").setValue(0);
 

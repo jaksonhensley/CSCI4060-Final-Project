@@ -106,11 +106,32 @@ public class PurchasedActivity extends AppCompatActivity
         Button settleCosts = findViewById( R.id.settleCostButton );
 
         settleCosts.setOnClickListener( new View.OnClickListener () {
+            int totalRows = 0;
             @Override
             public void onClick(View view) {
                 db = FirebaseDatabase.getInstance();
                 DatabaseReference purchasedReference = db.getReference( "Purchased" );
-                DatabaseReference userReference = db.getReference( "users" );
+                FirebaseDatabase.getInstance().getReference("users").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // iterate through all child nodes and increment totalRows counter
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            totalRows++;
+                        }
+
+                        // display total number of rows (optional)
+                        Log.d("Total Rows", String.valueOf(totalRows));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // handle error here
+                        Log.e("Database Error", "Error occurred while reading data from database: " + databaseError.getMessage());
+                    }
+                });
+
+
 
                 purchasedReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -136,7 +157,7 @@ public class PurchasedActivity extends AppCompatActivity
                         FirebaseHelper fbh = new FirebaseHelper();
                         Double users = Double.valueOf(fbh.getTotalUsers());
 
-                        split = (total / users);
+                        split = (total / totalRows);
 
 
                         Toast.makeText(getApplicationContext(), "Total Purchase Price " + split, Toast.LENGTH_SHORT).show();
@@ -152,7 +173,7 @@ public class PurchasedActivity extends AppCompatActivity
                     }
                 });
 
-                Toast.makeText(getApplicationContext(), "Purchase successful", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Purchase successful", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
